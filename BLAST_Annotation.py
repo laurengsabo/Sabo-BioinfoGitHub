@@ -17,7 +17,7 @@ def run_blastx(protein_faa, gene_fna, output_file):
         "-query", gene_fna,
         "-subject", protein_faa,
         "-out", output_file,
-        "-outfmt", "6",  # Tabular output
+        "-outfmt", "7",  # Tabular output
         "-evalue", "1e-5",  # Set e-value threshold
         "-max_target_seqs", "1",  # Report only the best match
     ]
@@ -65,6 +65,3 @@ if __name__ == "__main__":
     print(f"Genes present in {args.gene_fna}:")
     for gene in genes:
         print(gene)
-    
-    print("done!")
-
