@@ -65,4 +65,6 @@ if __name__ == "__main__":
     print(f"Genes present in {args.gene_fna}:")
     for gene in genes:
         print(gene)
+    
+    print("done!")
 
