@@ -17,8 +17,8 @@ def run_blastx(protein_faa, gene_fna, output_file):
         "-query", gene_fna,
         "-subject", protein_faa,
         "-out", output_file,
-        "-outfmt", "7",  # Tabular output
-        "-evalue", "1e-5",  # Set e-value threshold
+        "-outfmt", "6 qseqid sseqid qlen slen qstart qend sstart send evalue bitscore stitle",  # Tabular output with gene details
+        "-evalue", "1e-3",  # Set e-value threshold
         "-max_target_seqs", "1",  # Report only the best match
     ]
     
@@ -31,23 +31,25 @@ def run_blastx(protein_faa, gene_fna, output_file):
 
 def parse_blast_output(output_file):
     """
-    Parse BLASTX output to extract matching genes.
+    Parse BLASTX output to extract matching genes and label them.
     
     Args:
         output_file (str): Path to the BLAST output file.
     
     Returns:
-        List of gene IDs.
+        List of tuples with gene information (query ID, subject ID, gene name).
     """
-    genes = set()
+    genes = []
     with open(output_file, 'r') as file:
         for line in file:
             columns = line.strip().split("\t")
             if len(columns) > 1:
-                gene_id = columns[0]  # Assuming the first column is the gene ID from the nucleotide file
-                genes.add(gene_id)
+                query_id = columns[0]  # Query sequence ID
+                subject_id = columns[1]  # Subject sequence ID (from the protein file)
+                gene_name = columns[10]  # Gene title (from subject protein)
+                genes.append((query_id, subject_id, gene_name))
     
-    return list(genes)
+    return genes
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run BLASTX to find genes matching a protein sequence.")
@@ -63,5 +65,5 @@ if __name__ == "__main__":
     # Parse BLAST output and print matching genes
     genes = parse_blast_output(args.output_file)
     print(f"Genes present in {args.gene_fna}:")
-    for gene in genes:
-        print(gene)
+    for query_id, subject_id, gene_name in genes:
+        print(f"{query_id} matched with {subject_id} - Gene: {gene_name}")
