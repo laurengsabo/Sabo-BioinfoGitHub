@@ -1,13 +1,13 @@
 import csv
 
-# chatgpt generated with direction
+# Purpose: Input geno.csv and map.csv files for the creation of an annotated genotype matrix for r/qtl2 processing.
 
-# --- Inputs ---
+# Inputs
 geno_file = input("Enter genotype CSV filename (e.g., geno_clean.csv): ")
 map_file = input("Enter map CSV filename (e.g., map.csv): ")
 output_file = input("Enter output filename (e.g., combined.csv): ")
 
-# --- Load map data ---
+# Load map data
 map_data = {}
 with open(map_file, newline='') as map_csv:
     reader = csv.DictReader(map_csv)
@@ -20,7 +20,7 @@ with open(map_file, newline='') as map_csv:
                 'cM': row.get('cM', '').strip()
             }
 
-# --- Read geno_clean.csv ---
+# Read geno.csv
 with open(geno_file, newline='') as geno_csv:
     reader = csv.reader(geno_csv)
     header = next(reader)
@@ -38,7 +38,7 @@ with open(geno_file, newline='') as geno_csv:
         else:
             phenotype_map[sample] = '-'
 
-    # --- Prepare output file ---
+    # Prepare output file
     with open(output_file, 'w', newline='') as out_csv:
         writer = csv.writer(out_csv)
         writer.writerow(['phenotype', 'marker', 'chr', 'cM'] + samples)
@@ -76,4 +76,4 @@ with open(geno_file, newline='') as geno_csv:
             # Write row
             writer.writerow([first_pheno, base_marker, chrom_num, cM] + converted_genotypes)
 
-print(f"\n✅ File '{output_file}' created successfully.")
+print(f"\n File '{output_file}' created successfully.")
