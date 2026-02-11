@@ -32,7 +32,7 @@ def make_file(contig, output_dir):
     sp.call(["touch", dest_path])
 
 ### SPLIT JOBS FUNCTION
-    # 1. The function starts off by using the SPLICE Function and saving the lists of lists into a variable called "scopes".
+    # 1. The function starts off by using the SPLICE Function and saving the batches of lists into a variable called "scopes".
     #       Remember: Each of the lists' lengths within "scopes" are equal to the run size you inputted
     # 2. A directory is then made with your desired name in your desired location.
     # 3. Now... (here comes the multiprocessing magic)
@@ -42,9 +42,9 @@ def make_file(contig, output_dir):
     #       A. To do this, we must create a new list (AKA "jobs") with our scopes's lists + each of the list's contigs and their 
     #           commands. For example, if our scope is currently [A,B,C], then the altered list (AKA "jobs") 
     #           will be [do(A), do(B), do(C)]. We have to make a new list of "scopes" and not alter the current one. It's 
-    #           simpler.
-    #       B. Once we have successfully copied over the "jobs" list with all of the inner lists' contigs + the contigs' commands, 
-    #           now we run it. Since it is a for-loop, we're going to run each of the scopes sequentially, and the n-number
+    #           simpler, and it is easier to track the progress of the current batch.
+    #       B. Once we have successfully copied the info into the "jobs" list (scope contigs + the contigs' commands), 
+    #           we run it. Since it is a for-loop, we're going to run each of the scopes sequentially, and the n-number
     #           of items within each scope will run together.
     #       
 def split_jobs(size, fasta_loc, destination_root, folder_name):
